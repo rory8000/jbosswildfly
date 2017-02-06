@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!-- Declares the root element that allows behaviour to be modified through Angular custom HTML tags. -->
+<html ng-app="invoices">
+<head>
+    <title>demo</title>
+
+    <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css"/>
+
+    <link rel="stylesheet" href="https://gitcdn.link/repo/angular/bower-material/master/angular-material.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="lib/dependencies/jquery.min.js"></script>
+    <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/dependencies/ng-grid.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <!--<script src="https://gitcdn.link/repo/angular/bower-material/master/angular-material.min.js"></script>-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+
+    <script src="script/invoices/invoice.js"></script>
+    <script src="script/companies/company.js"></script>
+</head>
+
+<body>
+
+<h1>Java EE - Angular Application</h1>
+
+<br/>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the feedback messages.-->
+<div class="message" ng-controller="alertMessagesController">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+
+<br>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the form.-->
+<div ng-controller="invoiceFormController">
+    <div>
+        <!-- Specify the function to be called on submit and disable HTML5 validation, since we're using Angular validation-->
+        <form name="invoiceForm" ng-submit="addInvoice()" novalidate>
+
+            <!--<pre>{{selectedCompany | json}}</pre>-->
+
+            <div layout="row">
+                <div flex="45">
+                    <md-autocomplete flex
+                                     md-select-on-focus
+                                     md-input-id="autoCompleteId"
+                                     md-search-text-change="findCompaniesChange(searchText)"
+                                     md-selected-item-change="selectCompany(exp)"
+                                     md-selected-item="company.name"
+                                     md-input-name="name"
+                                     md-search-text="searchText"
+                                     md-min-length="2"
+                                     md-items="exp in findCompanies(searchText)"
+                                     md-item-text="exp.name"
+                                     md-floating-label="Empresa"
+                                     md-no-cache="true"
+                                     md-menu-class="autocomplete-custom-template">
+                        <md-item-template>
+                            <span class="item-title">
+                                <span md-highlight-text="searchText">{{exp.name}}</span>
+                            </span>
+                            <span class="item-metadata">
+                                <span class="item-metastat">
+                                  <strong>{{exp.ruc}}</strong>
+                                </span>
+                          </span>
+                        </md-item-template>
+                    </md-autocomplete>
+                    {{selectedCompany.name}} - {{selectedCompany.ruc}}
+                </div>
+
+                <!--<div>-->
+                <!--<label for="establishmentEmissionPoint">Establecimiento y Punto de emisión:</label>-->
+                <!--<md-radio-group id="establishmentEmissionPoint" ng-model="invoice.establishmentEmissionPoint.id" >-->
+                <!--<div ng-repeat="establishmentEmissionPoint in selectedCompany.establishmentEmissionPointList">-->
+                <!--<md-radio-button ng-if="!establishmentEmissionPoint.input" value="{{establishmentEmissionPoint.id}}" class="md-primary">-->
+                <!--{{establishmentEmissionPoint.establishment}} - {{establishmentEmissionPoint.emissionPoint}}-->
+                <!--</md-radio-button>-->
+                <!--<md-radio-button ng-if="establishmentEmissionPoint.input" value="{{establishmentEmissionPoint.id}}" class="md-primary md-radio-interactive">-->
+                <!--<span ng-class="{'has-error' : invoiceForm.establishment.$invalid && invoiceForm.establishment.$dirty}">-->
+                <!--<input id="establishment" name="establishment" ng-model="invoice.establishmentEmissionPoint.establishment"-->
+                <!--ng-required="invoice.establishmentEmissionPoint.id == -1" maxlength="3" ng-minlength="3" ng-maxlength="3"/>-->
+                <!--&lt;!&ndash; Display a check when the field is valid and was modified &ndash;&gt;-->
+                <!--<span ng-class="{'glyphicon glyphicon-ok' : invoiceForm.establishment.$valid && invoiceForm.establishment.$dirty}"></span>-->
+                <!--&lt;!&ndash; Validation messages to be displayed on required, minlength and maxlength &ndash;&gt;-->
+                <!--<span class="help-block" ng-show="invoiceForm.establishment.$error.required">Add Establishement.</span>-->
+                <!--<span class="help-block" ng-show="invoiceForm.establishment.$error.minlength">Establishement must be at least 3 characters long.</span>-->
+                <!--<span class="help-block" ng-show="invoiceForm.establishment.$error.maxlength">Establishement cannot be longer than 3 characters.</span>-->
+                <!--</span>-->
+                <!-- - -->
+                <!--<span ng-class="{'has-error' : invoiceForm.emissionPoint.$invalid && invoiceForm.emissionPoint.$dirty}">-->
+                <!--<input id="emissionPoint" name="emissionPoint" ng-model="invoice.establishmentEmissionPoint.emissionPoint"-->
+                <!--ng-required="invoice.establishmentEmissionPoint.id == -1" maxlength="3" ng-minlength="3" ng-maxlength="3"/>-->
+                <!--&lt;!&ndash; Display a check when the field is valid and was modified &ndash;&gt;-->
+                <!--<span ng-class="{'glyphicon glyphicon-ok' : invoiceForm.emissionPoint.$valid && invoiceForm.emissionPoint.$dirty}"></span>-->
+                <!--&lt;!&ndash; Validation messages to be displayed on required, minlength and maxlength &ndash;&gt;-->
+                <!--<span class="help-block" ng-show="invoiceForm.emissionPoint.$error.required">Add Emission Point.</span>-->
+                <!--<span class="help-block" ng-show="invoiceForm.emissionPoint.$error.minlength">Emission Point must be at least 3 characters long.</span>-->
+                <!--<span class="help-block" ng-show="invoiceForm.emissionPoint.$error.maxlength">Emission Point cannot be longer than 3 characters.</span>-->
+                <!--</span>-->
+                <!--(Custom)-->
+                <!--</md-radio-button>-->
+                <!--</div>-->
+                <!--</md-radio-group>-->
+                <!--</div>-->
+
+                <!--&lt;!&ndash; Display an error if the input is invalid and is dirty (only when someone changes the value) &ndash;&gt;-->
+                <!--<div class="form-group" ng-class="{'has-error' : invoiceForm.number.$invalid && invoiceForm.number.$dirty}">-->
+                <!--<label for="number">Número:</label>-->
+                <!--&lt;!&ndash; Display a check when the field is valid and was modified &ndash;&gt;-->
+                <!--<span ng-class="{'glyphicon glyphicon-ok' : invoiceForm.number.$valid && invoiceForm.number.$dirty}"></span>-->
+
+                <!--<input id="number" name="number" type="text" class="form-control" maxlength="13"-->
+                <!--ng-model="invoice.number"-->
+                <!--required ng-minlength="1" ng-maxlength="13"/>-->
+
+                <!--&lt;!&ndash; Validation messages to be displayed on required, minlength and maxlength &ndash;&gt;-->
+                <!--<p class="help-block" ng-show="invoiceForm.number.$error.required">Add Number.</p>-->
+                <!--<p class="help-block" ng-show="invoiceForm.number.$error.minlength">Name must be at least 1 characters long.</p>-->
+                <!--<p class="help-block" ng-show="invoiceForm.number.$error.maxlength">Name cannot be longer than 50 characters.</p>-->
+                <!--</div>-->
+
+            </div>
+
+            <div layout="row">
+                <!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+                <div class="form-group"
+                     ng-class="{'has-error' : invoiceForm.value.$invalid && invoiceForm.value.$dirty}">
+                    <label for="value">Value:</label>
+                    <!-- Display a check when the field is valid and was modified -->
+                    <span ng-class="{'glyphicon glyphicon-ok' : invoiceForm.value.$valid && invoiceForm.value.$dirty}"></span>
+
+                    <input id="value" name="value" type="text" class="form-control" maxlength="13"
+                           ng-model="invoice.value"
+                           required ng-minlength="1" ng-maxlength="13"/>
+
+                    <!-- Validation messages to be displayed on required, minlength and maxlength -->
+                    <p class="help-block" ng-show="invoiceForm.value.$error.required">Add Value.</p>
+                    <p class="help-block" ng-show="invoiceForm.value.$error.minlength">Name must be at least 1
+                        characters long.</p>
+                    <p class="help-block" ng-show="invoiceForm.value.$error.maxlength">Name cannot be longer than 50
+                        characters.</p>
+                </div>
+                <div class="form-group">
+                    <label for="type">Tipo:</label>
+                    <md-radio-group ng-model="invoice.type" id="type">
+                        <md-radio-button value="ALIMENTACION" class="md-primary">ALIMENTACION</md-radio-button>
+                        <md-radio-button value="EDUCACION"> EDUCACION</md-radio-button>
+                        <md-radio-button value="SALUD">SALUD</md-radio-button>
+                        <md-radio-button value="VESTIMENTA">VESTIMENTA</md-radio-button>
+                        <md-radio-button value="VIVIENDA">VIVIENDA</md-radio-button>
+                    </md-radio-group>
+                </div>
+            </div>
+
+
+            <!--<pre>{{invoice | json}}</pre>-->
+
+            <!-- Form buttons. The 'Save' button is only enabled when the form is valid. -->
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="invoiceForm.$invalid">Save</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <h1>RESUMEN</h1>
+        <div ng-repeat="summary in summaryList">{{summary.type}}: {{summary.total}}</div>
+    </div>
+</div>
+
+</body>
+</html>

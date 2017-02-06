@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- Declares the root element that allows behaviour to be modified through Angular custom HTML tags. -->
+<html ng-app="companies">
+<head>
+    <title>demo</title>
+
+    <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="lib/dependencies/jquery.min.js"></script>
+    <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/dependencies/ng-grid.min.js"></script>
+
+    <script src="script/companies/company.js"></script>
+</head>
+
+<body>
+
+<h1>Java EE - Angular Application</h1>
+
+<br/>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the feedback messages.-->
+<div class="message" ng-controller="alertMessagesController">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+
+<br>
+
+    <!-- Specify a JavaScript controller script that binds Javascript variables to the HTML.-->
+    <div class="grid" ng-controller="companiesListController">
+        <div>
+            <h3>List Companies</h3>
+        </div>
+
+        <!-- Binds the grid component to be displayed. -->
+        <div class="gridStyle" ng-grid="gridOptions"></div>
+
+        <!--  Bind the pagination component to be displayed. -->
+        <pagination direction-links="true" boundary-links="true"
+                    total-items="companies.totalResults" items-per-page="companies.pageSize"
+                    ng-model="companies.currentPage" ng-change="refreshGrid()">
+        </pagination>
+    </div>
+
+
+
+<!-- Specify a Angular controller script that binds Javascript variables to the form.-->
+<div class="form" ng-controller="companyFormController">
+    <!-- Verify company, if there is no id present, that we are Adding a company -->
+    <div ng-if="company.id == null">
+        <h3>Add Company</h3>
+    </div>
+    <!-- Otherwise it's an Edit -->
+    <div ng-if="company.id != null">
+        <h3>Edit Company</h3>
+    </div>
+
+    <div>
+        <!-- Specify the function to be called on submit and disable HTML5 validation, since we're using Angular validation-->
+        <form name="companyForm" ng-submit="updateCompany()" novalidate>
+
+            <!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+            <div class="form-group" ng-class="{'has-error' : companyForm.name.$invalid && companyForm.name.$dirty}">
+                <label for="name">Name:</label>
+                <!-- Display a check when the field is valid and was modified -->
+                <span ng-class="{'glyphicon glyphicon-ok' : companyForm.name.$valid && companyForm.name.$dirty}"></span>
+
+                <input id="name" name="name" type="text" class="form-control" maxlength="50"
+                       ng-model="company.name"
+                       required ng-minlength="2" ng-maxlength="50"/>
+
+                <!-- Validation messages to be displayed on required, minlength and maxlength -->
+                <p class="help-block" ng-show="companyForm.name.$error.required">Add Name.</p>
+                <p class="help-block" ng-show="companyForm.name.$error.minlength">Name must be at least 2 characters long.</p>
+                <p class="help-block" ng-show="companyForm.name.$error.maxlength">Name cannot be longer than 50 characters.</p>
+            </div>
+
+            <!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+            <div class="form-group" ng-class="{'has-error' : companyForm.ruc.$invalid && companyForm.ruc.$dirty}">
+                <label for="ruc">RUC:</label>
+                <!-- Display a check when the field is valid and was modified -->
+                <span ng-class="{'glyphicon glyphicon-ok' : companyForm.ruc.$valid && companyForm.ruc.$dirty}"></span>
+
+                <input id="ruc" name="ruc" type="text" class="form-control" maxlength="13"
+                       ng-model="company.ruc"
+                       required ng-minlength="13" ng-maxlength="13"/>
+
+                <!-- Validation messages to be displayed on required, minlength and maxlength -->
+                <p class="help-block" ng-show="companyForm.ruc.$error.required">Add RUC.</p>
+                <p class="help-block" ng-show="companyForm.ruc.$error.minlength">RUC must be at least 13 characters long.</p>
+                <p class="help-block" ng-show="companyForm.ruc.$error.maxlength">RUC cannot be longer than 13 characters.</p>
+            </div>
+
+            <!-- Form buttons. The 'Save' button is only enabled when the form is valid. -->
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="companyForm.$invalid">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
