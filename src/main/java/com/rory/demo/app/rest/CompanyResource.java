@@ -7,7 +7,9 @@ import com.rory.demo.pagination.PaginatedListWrapper;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @ApplicationPath("/resources")
@@ -50,18 +52,27 @@ public class CompanyResource extends Application {
 
     @GET
     @Path("{id}")
-    public CompanyDTO getCompany(@PathParam("id") Long id) {
+    public CompanyDTO getCompany(@Context SecurityContext sc, @PathParam("id") Long id) {
+        if (!sc.isUserInRole("admin")){
+            throw new SecurityException("User is unauthorized.");
+        }
         return companyManager.findById(id);
     }
 
     @POST
-    public CompanyDTO saveCompany(CompanyDTO company) {
+    public CompanyDTO saveCompany(@Context SecurityContext sc, CompanyDTO company) {
+        if (!sc.isUserInRole("admin")){
+            throw new SecurityException("User is unauthorized.");
+        }
         return companyManager.saveOrUpdate(company);
     }
 
     @DELETE
     @Path("{id}")
-    public void deleteCompany(@PathParam("id") Long id) {
+    public void deleteCompany(@Context SecurityContext sc, @PathParam("id") Long id) {
+        if (!sc.isUserInRole("admin")){
+            throw new SecurityException("User is unauthorized.");
+        }
         companyManager.deleteById(id);
     }
 

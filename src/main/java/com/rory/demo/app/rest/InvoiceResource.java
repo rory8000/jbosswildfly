@@ -7,7 +7,9 @@ import com.rory.demo.dtos.InvoiveSummaryDTO;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @ApplicationPath("/resources")
@@ -21,7 +23,10 @@ public class InvoiceResource extends Application {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void save(InvoiceDTO invoiceDTO) {
+    public void save(@Context SecurityContext sc, InvoiceDTO invoiceDTO) {
+        if (!sc.isUserInRole("admin")){
+            throw new SecurityException("User is unauthorized.");
+        }
         invoiceManager.save(invoiceDTO);
     }
 
