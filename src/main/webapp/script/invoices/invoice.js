@@ -1,4 +1,4 @@
-var app1 = angular.module('invoices', ['ngResource', 'ui.bootstrap', 'ngMaterial']);
+var app1 = angular.module('invoices', ['ngResource', 'ui.bootstrap', 'ngMaterial', 'common']);
 
 app1.controller('invoiceFormController', function ($scope, $rootScope, invoiceService, companyService, invoiceService2) {
 

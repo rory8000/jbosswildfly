@@ -15,6 +15,8 @@
     <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/dependencies/ng-grid.min.js"></script>
 
+    <script src="script/common/sessionService.js"></script>
+    <script src="script/common/common.js"></script>
     <script src="script/companies/company.js"></script>
 </head>
 
@@ -28,6 +30,22 @@
 <div class="message" ng-controller="alertMessagesController">
     <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 </div>
+
+<div ng-controller="loginController">
+    <form name="loginForm" ng-submit="login()" novalidate>
+        <input id="username" name="username" type="text" class="form-control" maxlength="50"
+               ng-model="username"
+               required ng-minlength="2" ng-maxlength="50"/>
+        <input id="password" name="password" type="text" class="form-control" maxlength="50"
+               ng-model="password"
+               required ng-minlength="2" ng-maxlength="50"/>
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary" ng-disabled="loginForm.$invalid">Login</button>
+            <button type="button" class="btn btn-primary" ng-click="logout()">Logout</button>
+        </div>
+    </form>
+</div>
+
 
 <br>
 
@@ -45,6 +63,8 @@
                     total-items="companies.totalResults" items-per-page="companies.pageSize"
                     ng-model="companies.currentPage" ng-change="refreshGrid()">
         </pagination>
+
+        <button type="button" class="btn btn-primary" ng-click="refreshGrid()">Refresh</button>
     </div>
 
 

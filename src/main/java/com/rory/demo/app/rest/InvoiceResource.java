@@ -14,8 +14,6 @@ import java.util.List;
 
 @ApplicationPath("/resources")
 @Path("invoices")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class InvoiceResource extends Application {
 
     @Inject

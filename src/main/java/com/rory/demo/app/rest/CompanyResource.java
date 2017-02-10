@@ -52,10 +52,7 @@ public class CompanyResource extends Application {
 
     @GET
     @Path("{id}")
-    public CompanyDTO getCompany(@Context SecurityContext sc, @PathParam("id") Long id) {
-        if (!sc.isUserInRole("admin")){
-            throw new SecurityException("User is unauthorized.");
-        }
+    public CompanyDTO getCompany(@PathParam("id") Long id) {
         return companyManager.findById(id);
     }
 

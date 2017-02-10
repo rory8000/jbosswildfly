@@ -1,4 +1,4 @@
-var app = angular.module('companies', ['ngResource', 'ngGrid', 'ui.bootstrap']);
+var app = angular.module('companies', ['ngResource', 'ngGrid', 'ui.bootstrap', 'common']);
 // Create a controller with name companiesList to bind to the html page.
 app.controller('companiesListController', function ($scope, $rootScope, companyService) {
     // Initialize required information: sorting, the first page to show and the grid options.
@@ -178,6 +178,6 @@ app.controller('alertMessagesController', function ($scope, $rootScope) {
 });
 
 // Service that provides companies operations
-app.factory('companyService', function ($resource) {
+app.factory('companyService', ['$resource', function ($resource) {
     return $resource('resources/companies/:id');
-});
+}]);
