@@ -13,8 +13,6 @@ import java.security.GeneralSecurityException;
 
 @ApplicationPath("/resources")
 @Path("security")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class SecurityResource extends Application {
 
     @POST
