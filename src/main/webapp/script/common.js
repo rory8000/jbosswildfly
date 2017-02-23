@@ -27,7 +27,7 @@ common.controller('loginController', function ($scope, $rootScope, SessionServic
 common.factory('sessionInjector', ['SessionService', function (SessionService) {
     var sessionInjector = {
         request: function (config) {
-            config.headers['service_key'] = '3b91cab8-926f-49b6-ba00-920bcf934c2a';
+            config.headers['service_key'] = 'f80ebc87-ad5c-4b29-9366-5359768df5a1';
             if (!SessionService.isAnonymous()) {
                 config.headers['auth_token'] = SessionService.getToken();
                 // config.headers['service_key'] = '3b91cab8-926f-49b6-ba00-920bcf934c2a';
