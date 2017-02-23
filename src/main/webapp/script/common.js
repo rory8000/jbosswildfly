@@ -49,9 +49,10 @@ common.factory('SessionService', ['$injector', '$q', function ($injector, $q) {
 
     sessionService.readToken = function (username, password) {
         var $http = $injector.get('$http');
+        var $location = $injector.get('$location');
         return $http({
             method: 'POST',
-            url: 'http://localhost:8080/jbosswildfly-1.0/resources/security/login',
+            url: $location.protocol() + '://'+ $location.host() +':'+  $location.port()+ '/jbosswildfly-1.0/resources/security/login',
             data: $.param({username: username, password: password}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (res) {
