@@ -70,9 +70,10 @@ common.factory('SessionService', ['$injector', '$q', function ($injector, $q) {
 
     sessionService.logout = function () {
         var $http = $injector.get('$http');
+        var $location = $injector.get('$location');
         return $http({
             method: 'POST',
-            url: 'http://localhost:8080/jbosswildfly-1.0/resources/security/logout'
+            url: $location.protocol() + '://'+ $location.host() +':'+  $location.port()+'/resources/security/logout'
         }).success(function (res) {
                 console.log('Logout Success');
 
