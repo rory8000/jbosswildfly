@@ -22,9 +22,9 @@ public class InvoiceResource extends Application {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void save(@Context SecurityContext sc, InvoiceDTO invoiceDTO) {
-        if (!sc.isUserInRole("admin")){
-            throw new SecurityException("User is unauthorized.");
-        }
+//        if (!sc.isUserInRole("admin")){
+//            throw new SecurityException("User is unauthorized.");
+//        }
         invoiceManager.save(invoiceDTO);
     }
 
