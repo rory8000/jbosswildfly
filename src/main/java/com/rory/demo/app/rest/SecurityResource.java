@@ -2,6 +2,7 @@ package com.rory.demo.app.rest;
 
 import com.rory.demo.app.security.HTTPHeaderNames;
 import com.rory.demo.app.security.RoryAuthenticator;
+import org.jboss.logging.Logger;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -14,6 +15,8 @@ import java.security.GeneralSecurityException;
 @ApplicationPath("/resources")
 @Path("security")
 public class SecurityResource extends Application {
+
+    private static final Logger LOGGER = Logger.getLogger(SecurityResource.class);
 
     @POST
     @Path("login")
@@ -36,6 +39,7 @@ public class SecurityResource extends Application {
             return getNoCacheResponseBuilder(Response.Status.OK).entity(jsonObj.toString()).build();
 
         } catch (final LoginException ex) {
+            LOGGER.debug(ex.getMessage(), ex);
             JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
             jsonObjBuilder.add("message", "Problem matching service key, username and password");
             JsonObject jsonObj = jsonObjBuilder.build();
