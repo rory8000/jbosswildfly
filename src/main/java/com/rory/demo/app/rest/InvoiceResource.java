@@ -25,8 +25,11 @@ public class InvoiceResource extends Application {
 //        if (!sc.isUserInRole("admin")){
 //            throw new SecurityException("User is unauthorized.");
 //        }
+
         invoiceManager.save(invoiceDTO);
     }
+
+
 
     @GET
     @Path("summary")
