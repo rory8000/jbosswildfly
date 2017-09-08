@@ -39,7 +39,7 @@ public class SecurityResource extends Application {
             return getNoCacheResponseBuilder(Response.Status.OK).entity(jsonObj.toString()).build();
 
         } catch (final LoginException ex) {
-            LOGGER.debug(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
             jsonObjBuilder.add("message", "Problem matching service key, username and password");
             JsonObject jsonObj = jsonObjBuilder.build();
