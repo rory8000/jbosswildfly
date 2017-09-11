@@ -24,6 +24,9 @@ public class Invoice implements BaseEntity {
     @Column(name = "type")
     private InvoiceTypeEnum type;
 
+    @Column(name = "year")
+    private Long year;
+
     @ManyToOne
     @JoinColumn(name = "establishment_emission_point_id")
     private EstablishmentEmissionPoint establishmentEmissionPoint;
@@ -66,5 +69,13 @@ public class Invoice implements BaseEntity {
 
     public void setEstablishmentEmissionPoint(EstablishmentEmissionPoint establishmentEmissionPoint) {
         this.establishmentEmissionPoint = establishmentEmissionPoint;
+    }
+
+    public Long getYear() {
+        return year;
+    }
+
+    public void setYear(Long year) {
+        this.year = year;
     }
 }
