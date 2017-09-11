@@ -58,18 +58,18 @@ public class CompanyResource extends Application {
 
     @POST
     public CompanyDTO saveCompany(@Context SecurityContext sc, CompanyDTO company) {
-        if (!sc.isUserInRole("admin")){
-            throw new SecurityException("User is unauthorized.");
-        }
+//        if (!sc.isUserInRole("admin")){
+//            throw new SecurityException("User is unauthorized.");
+//        }
         return companyManager.saveOrUpdate(company);
     }
 
     @DELETE
     @Path("{id}")
     public void deleteCompany(@Context SecurityContext sc, @PathParam("id") Long id) {
-        if (!sc.isUserInRole("admin")){
-            throw new SecurityException("User is unauthorized.");
-        }
+//        if (!sc.isUserInRole("admin")){
+//            throw new SecurityException("User is unauthorized.");
+//        }
         companyManager.deleteById(id);
     }
 
