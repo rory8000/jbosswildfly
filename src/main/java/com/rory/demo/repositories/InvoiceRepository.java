@@ -29,6 +29,7 @@ public class InvoiceRepository extends BaseRepository<Invoice, Long> {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT new com.rory.demo.dtos.InvoiveSummaryDTO(c.type, SUM(c.value))\n" +
                 "        FROM Invoice c\n" +
+                " WHERE c.year is null" +
                 "        GROUP BY c.type");
         TypedQuery<InvoiveSummaryDTO> query = entityManager.createQuery(sql.toString(), InvoiveSummaryDTO.class);
         return query.getResultList();
